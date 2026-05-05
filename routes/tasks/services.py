@@ -28,7 +28,7 @@ def getTaskKwargs(request: Request):
 def getValidUpdateKwargsForTask(request: Request):
     task_kwargs = getTaskKwargs(request)
 
-    update_kwargs = dict(filter(lambda value: value is not None, task_kwargs.values()))
+    update_kwargs = {k: v for k, v in task_kwargs.items() if v is not None}
 
     return update_kwargs
     

@@ -49,7 +49,24 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '1/day',   # Limite para quem não está logado
         'user': '10/day'  # Limite para quem está logado
-    }
+    },
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication', # Opcional, para o Admin
+    ),
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    # Tempo que o token de acesso (crachá) vale
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    
+    # Tempo que o token de atualização vale
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    
+    # Se você quiser mudar o prefixo de "Bearer" para "Token" ou outro
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 TEMPLATES = [

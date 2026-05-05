@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from .models import Task
@@ -18,6 +18,18 @@ class TaskListView(ListAPIView):
         user = self.request.user
 
         return Task.objects.filter(usuario=user)
+
+
+class TaskDeleteView(DestroyAPIView):
+    serializer_class = TaskSerializer
+
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        return Task.objects.filter(usuario=user)
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -38,12 +50,12 @@ def task_create_view(request: Request):
 
 @api_view(["PUT", "PATCH"])
 @permission_classes([IsAuthenticated])
-def task_update_view(request: Request, id: int):
-    idLimpo = getIdLimpo(id)
+def task_update_view(request: Request, pk: int):
+    idLimpo = getIdLimpo(pk)
 
     if idLimpo is None:
         return Response({
-            "erro": f"Id {id} inválido.",
+            "erro": f"Id {pk} inválido.",
         }, status=403)
     
     update_kwargs = getValidUpdateKwargsForTask(request)

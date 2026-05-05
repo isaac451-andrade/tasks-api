@@ -3,6 +3,6 @@ from .models import Task
 
 class TaskSerializer(serializers.ModelSerializer):
 
-    class Media:
+    class Meta:
         model = Task
         fields = "__all__"
