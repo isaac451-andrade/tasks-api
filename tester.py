@@ -13,8 +13,8 @@ def gerar_tokens_acesso(username: str, password: str):
     return dados
 
 
-access = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc3OTUwMDgxLCJpYXQiOjE3Nzc5NDY0ODEsImp0aSI6ImI2NDJjMWEzMDJhMDRmYjRhMDNkNTU2YTM5MmFhOGYxIiwidXNlcl9pZCI6IjEifQ.0_bfbYeFtc_98v-p_e23oxyk6RyedYK8oryU7yMtdPs'
-refresh = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc3ODAzMTg2OSwiaWF0IjoxNzc3OTQ1NDY5LCJqdGkiOiIxZjdhNGRhYjQwNTg0YTZkOGQ3YjZmNWE5ZWI1ZDg2MyIsInVzZXJfaWQiOiIxIn0.Q1AR-d1j6lL4aa92NwWBSJIgS_S2BDi_wQMP9Uij0oI'
+access = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDMwODkwLCJpYXQiOjE3NzgwMjcyOTAsImp0aSI6IjNiMjViNGJmM2VmYjRjY2I5ZTU3NDdkYWMxM2I0ZTZkIiwidXNlcl9pZCI6IjEifQ.t1brk8sk3JA9mN0wpOj1HSoGSIofdM68kV8ducT8zEM'
+refresh = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc3ODEwOTg1NiwiaWF0IjoxNzc4MDIzNDU2LCJqdGkiOiIxZWE1N2QyMTYzMTQ0YTNiYTY0MTU4MzA5MDdhZWQ1NiIsInVzZXJfaWQiOiIxIn0.i4pXk7Zw8x_TjjoGSPsEI04sNYIOKCHjoOm-EFG0HFg'
 
 
 def criar_task_teste(dict_info:dict):
@@ -74,13 +74,35 @@ def atualizar_task_teste(pk:int, update_info:dict):
 
     return dados
 
-if __name__ == "__main__":
-    print(atualizar_task_teste(1, {
-        "titulo": "AAAAAAAAAA",
-        "descricao": "BBBBBBBBBBBB"
-    }))
 
-    print(listar_task_teste());
+def deletar_task_teste(pk: int):
+    response = requests.delete(f"http://127.0.0.1:8000/api/v1/tasks/delete/{pk}/",
+    headers= {
+        "Authorization": f"Bearer {access}"
+    })
+
+    print(response.ok, response.status_code)
+    
+
+if __name__ == "__main__":
+
+    from datetime import datetime
+
+    data = datetime.strptime("23/05/2026 20:55", "%d/%m/%Y %H:%M")
+    print(data)
+
+    # dados = atualizar_task_teste(1, {
+    #     "data_conclusao": data
+    # })
+
+    # da = deletar_task_teste(5)
+
+    # print(da)
+
+    # print(gerar_tokens_acesso(username="admin", password="123"))
+
+
+    print(listar_task_teste())
     
     # data = {
     #     "refresh": refresh
@@ -91,3 +113,4 @@ if __name__ == "__main__":
     # dados = response.json()
 
     # print(dados)
+

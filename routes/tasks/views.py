@@ -8,6 +8,7 @@ from django.http import HttpRequest
 from rest_framework.request import Request
 from rest_framework.response import Response
 from .services import *
+from django.utils.dateparse import parse_datetime
 
 class TaskListView(ListAPIView):
     serializer_class = TaskSerializer
@@ -41,6 +42,15 @@ def task_create_view(request: Request):
             "erro": "O titulo da tarefa é obrigatório."
         }, status=403)
     
+    data_conclusao = task_kwargs.get("data_conclusao") 
+
+    if data_conclusao is not None:
+        
+        if not checkData(data_conclusao):
+            return Response({
+                "erro": "O campo 'data_conclusao deve estar no formato iso'",
+            }, status=403)
+    
     tarefa = Task.objects.create(**task_kwargs)
 
     return Response({
@@ -60,6 +70,15 @@ def task_update_view(request: Request, pk: int):
     
     update_kwargs = getValidUpdateKwargsForTask(request)
 
+    data_conclusao = update_kwargs.get("data_conclusao") 
+
+    if data_conclusao is not None:
+        
+        if not checkData(data_conclusao):
+            return Response({
+                "erro": "O campo 'data_conclusao deve estar no formato iso'",
+            }, status=403)
+
     if not update_kwargs:
         return Response({
             "erro": "Não foi fornecido nenhum campo válido para atualização. Mande algum desses campos: 'titulo', 'descricao', 'observacao', 'status' ",
@@ -76,9 +95,12 @@ def task_update_view(request: Request, pk: int):
     keys_for_save = list(update_kwargs.keys())
 
     task_to_be_updated = task_to_be_updated.first()
-
-    task_to_be_updated.save(**update_kwargs, update_fields=keys_for_save)
+    
+    for campo, value in update_kwargs.items():
+        setattr(task_to_be_updated, campo, value)
+    
+    task_to_be_updated.save(update_fields=keys_for_save)
 
     return Response({
         "data": "Tarefa atualizada com sucesso."
-    }, 204)
+    }, status=200)
