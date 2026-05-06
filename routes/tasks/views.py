@@ -1,14 +1,11 @@
-from django.shortcuts import render
 from rest_framework.generics import ListAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from .models import Task
 from .serializers import TaskSerializer
-from django.http import HttpRequest
 from rest_framework.request import Request
 from rest_framework.response import Response
 from .services import *
-from django.utils.dateparse import parse_datetime
 
 class TaskListView(ListAPIView):
     serializer_class = TaskSerializer
